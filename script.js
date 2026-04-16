@@ -44,8 +44,12 @@ function escapeHtml(value) {
 }
 
 function getStatusLabel(product) {
-  if (product.status === "live") {
+  if (product.affiliateUrl) {
     return "Live affiliate link";
+  }
+
+  if (product.product_url) {
+    return "Non-affiliate test link";
   }
 
   if (product.status === "draft") {
@@ -73,7 +77,7 @@ function withTrackingParams(rawUrl, product) {
       url.searchParams.set("utm_medium", "affiliate_site");
     }
     if (!url.searchParams.has("utm_campaign")) {
-      url.searchParams.set("utm_campaign", product.slug);
+      url.searchParams.set("utm_campaign", product.utm_slug || product.slug);
     }
     return url.toString();
   } catch (_error) {
@@ -82,30 +86,35 @@ function withTrackingParams(rawUrl, product) {
 }
 
 function affiliateAction(product) {
-  if (!product.affiliateUrl) {
-    return '<span class="button button-disabled" aria-disabled="true">Affiliate link pending</span>';
+  const destination = product.affiliateUrl || product.product_url;
+  if (!destination) {
+    return '<span class="button button-disabled" aria-disabled="true">Destination pending</span>';
   }
 
-  const href = product.appendUtm === false ? product.affiliateUrl : withTrackingParams(product.affiliateUrl, product);
+  const href = product.appendUtm === false ? destination : withTrackingParams(destination, product);
+  const rel = product.affiliateUrl ? "sponsored nofollow noopener" : "noopener";
 
   return `
     <a
       class="button button-primary"
       href="${escapeHtml(href)}"
       target="_blank"
-      rel="sponsored nofollow noopener"
+      rel="${rel}"
       data-affiliate-click
       data-product-slug="${escapeHtml(product.slug)}"
-      data-product-title="${escapeHtml(product.title)}"
+      data-product-title="${escapeHtml(product.product_name || product.title)}"
       data-merchant="${escapeHtml(product.merchant)}"
     >
-      Check availability
+      ${escapeHtml(product.cta || "View Find")}
     </a>
   `;
 }
 
 function productCard(product) {
   const statusClass = product.status === "live" ? "status-badge live" : "status-badge";
+  const title = product.product_name || product.title;
+  const blurb = product.short_blurb || product.hook;
+  const why = product.why_it_matters || product.benefit;
   const tags = (product.tags || [])
     .slice(0, 4)
     .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
@@ -119,8 +128,9 @@ function productCard(product) {
           <span class="${statusClass}">${escapeHtml(getStatusLabel(product))}</span>
           <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
         </div>
-        <h2>${escapeHtml(product.title)}</h2>
-        <p>${escapeHtml(product.hook)}</p>
+        <h2>${escapeHtml(title)}</h2>
+        <p>${escapeHtml(blurb)}</p>
+        <p>${escapeHtml(why)}</p>
         <div class="tag-list">${tags}</div>
         <div class="product-actions">
           <a class="button button-secondary" href="${escapeHtml(getProductDetailUrl(product))}">View details</a>
@@ -150,6 +160,30 @@ function renderProductGrid(target, productList, emptyMessage) {
   target.innerHTML = productList.map(productCard).join("");
 }
 
+function setupHomeFinds() {
+  const featuredGrid = document.querySelector("#featured-finds-grid");
+  const latestGrid = document.querySelector("#latest-finds-grid");
+  if (!featuredGrid && !latestGrid) {
+    return;
+  }
+
+  const liveOrReady = products.filter((product) => product.status === "live" || product.product_url || product.affiliateUrl);
+  const source = liveOrReady.length ? liveOrReady : products;
+  const featured = source.filter((product) => product.lane === "smart-buys-under-50").slice(0, 3);
+  const latest = [...source].slice(0, 3);
+
+  renderProductGrid(
+    featuredGrid,
+    featured,
+    "Featured finds will appear here after products are approved in the private CueCart dashboard."
+  );
+  renderProductGrid(
+    latestGrid,
+    latest,
+    "Latest finds will appear here after the first public product export."
+  );
+}
+
 function setupCatalogPage() {
   const page = document.querySelector("[data-catalog-page]");
   if (!page) {
@@ -169,9 +203,12 @@ function setupCatalogPage() {
       const matchesFilter = activeFilter === "all" || product.lane === activeFilter;
       const searchableText = [
         product.title,
+        product.product_name,
         product.category,
         product.hook,
+        product.short_blurb,
         product.benefit,
+        product.why_it_matters,
         product.whyWeLike,
         product.merchant,
         ...(product.tags || []),
@@ -247,7 +284,11 @@ function setupProductDetailPage() {
     return;
   }
 
-  document.title = `${product.title} | CueCart Finds`;
+  const title = product.product_name || product.title;
+  const blurb = product.short_blurb || product.hook;
+  const why = product.why_it_matters || product.benefit;
+
+  document.title = `${title} | CueCart Finds`;
 
   const bestFor = (product.bestFor || [])
     .map((item) => `<li>${escapeHtml(item)}</li>`)
@@ -273,13 +314,13 @@ function setupProductDetailPage() {
       </div>
       <div class="product-detail-content">
         <p class="eyebrow">${escapeHtml(product.category)}</p>
-        <h1>${escapeHtml(product.title)}</h1>
+        <h1>${escapeHtml(title)}</h1>
         <div class="product-meta-row">
           <span class="${product.status === "live" ? "status-badge live" : "status-badge"}">${escapeHtml(getStatusLabel(product))}</span>
           <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
         </div>
-        <p class="hero-text">${escapeHtml(product.hook)}</p>
-        <p>${escapeHtml(product.benefit)}</p>
+        <p class="hero-text">${escapeHtml(blurb)}</p>
+        <p>${escapeHtml(why)}</p>
         <div class="product-actions">
           ${affiliateAction(product)}
           <a class="button button-secondary" href="finds.html">Back to all finds</a>
@@ -287,7 +328,7 @@ function setupProductDetailPage() {
         <ul class="detail-list">
           <li>
             <strong>Why it fits CueCart</strong>
-            ${escapeHtml(product.whyWeLike)}
+            ${escapeHtml(product.whyWeLike || why)}
           </li>
           <li>
             <strong>Merchant status</strong>
@@ -337,4 +378,5 @@ function setupAffiliateClickTracking() {
 setupCatalogPage();
 setupCategoryPage();
 setupProductDetailPage();
+setupHomeFinds();
 setupAffiliateClickTracking();
