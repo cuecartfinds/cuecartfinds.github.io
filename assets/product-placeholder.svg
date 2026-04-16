@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">CueCart Finds product placeholder</title>
+  <desc id="desc">Clean product placeholder artwork for CueCart Finds research-ready product cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="800" y1="0" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6FAFB"/>
+      <stop offset="1" stop-color="#DFF3F4"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="240" x2="560" y1="160" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#18AEB4"/>
+      <stop offset="1" stop-color="#08213F"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <circle cx="400" cy="300" r="180" fill="#FFFFFF" opacity="0.78"/>
+  <path d="M264 236h66c22 0 37 13 43 34l18 78h180l-22 86H394c-32 0-57-22-65-52l-38-108h-27c-15 0-24-7-24-18s9-20 24-20Z" fill="url(#teal)"/>
+  <path d="M402 340l53 49 112-123c9-10 23-11 32-3 9 7 9 21 1 31L466 441c-9 10-25 10-34 1l-75-71c-9-8-9-22 0-30 8-9 22-9 45-1Z" fill="#B8E6CC"/>
+  <path d="M361 468h190" stroke="#08213F" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="392" cy="503" r="22" fill="#08213F"/>
+  <circle cx="522" cy="503" r="22" fill="#08213F"/>
+  <circle cx="454" cy="215" r="9" fill="#18AEB4"/>
+  <circle cx="486" cy="206" r="7" fill="#18AEB4"/>
+  <path d="M535 142l15 36 36 15-36 15-15 36-15-36-36-15 36-15 15-36Z" fill="#B8E6CC"/>
+  <text x="400" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#08213F">CueCart Finds</text>
+  <text x="400" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="600" fill="#586879">Product research placeholder</text>
+</svg>

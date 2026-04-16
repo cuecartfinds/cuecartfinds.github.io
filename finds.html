@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Finds | CueCart Finds</title>
+    <meta
+      name="description"
+      content="Browse CueCart Finds product discovery lanes, research-ready finds, and future affiliate product pages."
+    />
+    <link rel="canonical" href="https://cuecartfinds.github.io/finds.html" />
+    <link rel="icon" href="assets/cuecart-finds-favicon.ico" />
+    <link rel="apple-touch-icon" href="assets/cuecart-finds-icon-192.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body data-catalog-page>
+    <a class="skip-link" href="#main">Skip to main content</a>
+
+    <header class="site-header">
+      <nav class="nav container" aria-label="Primary navigation">
+        <a class="brand" href="index.html" aria-label="CueCart Finds home">
+          <img class="brand-logo" src="assets/cuecart-finds-logo-web-600.png" alt="" width="180" height="64" />
+          <span class="brand-text">CueCart Finds</span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-links">Menu</button>
+        <div class="nav-links" id="nav-links">
+          <a href="finds.html" aria-current="page">Finds</a>
+          <a href="smart-buys-under-50.html">Under $50</a>
+          <a href="useful-home-finds.html">Home</a>
+          <a href="everyday-problem-solvers.html">Problem-Solvers</a>
+          <a href="editorial-standards.html">Standards</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="page-hero">
+        <div class="container narrow">
+          <p class="eyebrow">Product system</p>
+          <h1>Finds built for useful discovery.</h1>
+          <p>
+            This catalog is the public structure for future affiliate product picks. Items marked
+            as research-ready are not live recommendations yet. Once exact products and approved
+            affiliate links are added, the buttons become active.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container catalog-layout">
+          <aside class="filter-panel" aria-label="Product filters">
+            <h2>Filter finds</h2>
+            <label class="search-label" for="product-search">Search by product, use case, or tag</label>
+            <input id="product-search" class="search-input" type="search" placeholder="Try kitchen, pets, desk..." />
+
+            <div class="filter-group" aria-label="Category filters">
+              <button class="filter-button is-active" type="button" data-filter="all">All finds</button>
+              <button class="filter-button" type="button" data-filter="smart-buys-under-50">Under $50</button>
+              <button class="filter-button" type="button" data-filter="useful-home-finds">Home finds</button>
+              <button class="filter-button" type="button" data-filter="everyday-problem-solvers">Problem-solvers</button>
+            </div>
+
+            <div class="operator-note">
+              <strong>Operator note</strong>
+              <span>Edit <code>data/products.js</code> to add exact products, merchants, and approved affiliate URLs.</span>
+            </div>
+          </aside>
+
+          <div>
+            <div class="catalog-toolbar">
+              <p id="catalog-status">Loading finds...</p>
+              <a href="editorial-standards.html">How products are reviewed</a>
+            </div>
+            <div class="product-grid" id="product-grid" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="disclosure" aria-label="Affiliate disclosure">
+        <div class="container">
+          <p>CueCart Finds may earn from qualifying purchases through affiliate links.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <span>CueCart Finds</span>
+        <nav aria-label="Footer navigation">
+          <a href="about.html">About</a>
+          <a href="disclosure.html">Affiliate Disclosure</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <span>&copy; <span id="year">2026</span> CueCart Finds. All rights reserved.</span>
+      </div>
+    </footer>
+
+    <script src="data/products.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

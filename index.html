@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- EDIT SITE TITLE HERE -->
-    <title>CueCart Finds | Useful, Affordable Product Finds</title>
+    <title>CueCart Finds | Useful, Affordable Product Discovery</title>
     <meta
       name="description"
-      content="CueCart Finds curates useful, affordable finds for home, life, everyday essentials, gadgets, organization, and smart buys under $50."
+      content="CueCart Finds curates useful, affordable, trend-aware product finds for home, lifestyle, organization, gadgets, and everyday smart buys."
     />
+    <link rel="canonical" href="https://cuecartfinds.github.io/" />
 
     <meta property="og:title" content="CueCart Finds" />
     <meta
@@ -17,10 +18,25 @@
       content="Useful, affordable finds for home, life, and everyday wins."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://cuecartfinds.github.io/" />
+    <meta property="og:image" content="https://cuecartfinds.github.io/assets/cuecart-finds-logo-web-600.png" />
 
     <link rel="icon" href="assets/cuecart-finds-favicon.ico" />
     <link rel="apple-touch-icon" href="assets/cuecart-finds-icon-192.png" />
+    <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="style.css" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "CueCart Finds",
+        "url": "https://cuecartfinds.github.io/",
+        "logo": "https://cuecartfinds.github.io/assets/cuecart-finds-logo-web-600.png",
+        "email": "CueCartFinds@gmail.com",
+        "description": "CueCart Finds is a practical product-discovery brand focused on useful, affordable, visually understandable finds."
+      }
+    </script>
   </head>
 
   <body>
@@ -28,12 +44,8 @@
 
     <header class="site-header">
       <nav class="nav container" aria-label="Primary navigation">
-        <a class="brand" href="#top" aria-label="CueCart Finds home">
-          <!--
-            EDIT LOGO FILE PATH HERE:
-            Replace the src below if you upload a different logo file.
-            If the image cannot load, the text fallback below still shows the brand name.
-          -->
+        <a class="brand" href="index.html" aria-label="CueCart Finds home">
+          <!-- EDIT LOGO FILE PATH HERE -->
           <img
             class="brand-logo"
             src="assets/cuecart-finds-logo-web-600.png"
@@ -50,16 +62,18 @@
         </button>
 
         <div class="nav-links" id="nav-links">
-          <a href="#about">About</a>
-          <a href="#lanes">Content Lanes</a>
-          <a href="#why-follow">Why Follow</a>
-          <a href="#contact">Contact</a>
+          <a href="finds.html">Finds</a>
+          <a href="smart-buys-under-50.html">Under $50</a>
+          <a href="useful-home-finds.html">Home</a>
+          <a href="everyday-problem-solvers.html">Problem-Solvers</a>
+          <a href="editorial-standards.html">Standards</a>
+          <a href="contact.html">Contact</a>
         </div>
       </nav>
     </header>
 
     <main id="main">
-      <section class="hero" id="top">
+      <section class="hero hero-home" id="top">
         <div class="container hero-grid">
           <div class="hero-copy">
             <p class="eyebrow">Practical product discovery</p>
@@ -70,83 +84,114 @@
 
             <!-- EDIT HERO SUPPORTING COPY HERE -->
             <p class="hero-text">
-              A curated product-discovery brand focused on smart buys, practical home finds,
-              everyday problem-solvers, and visually clear recommendations without the hype.
+              CueCart Finds is built to surface practical products with clear use cases,
+              low-hype recommendations, and transparent affiliate disclosures.
             </p>
 
             <div class="hero-actions">
-              <a class="button button-primary" href="#lanes">Explore the lanes</a>
-              <a class="button button-secondary" href="#contact">Contact CueCart</a>
+              <a class="button button-primary" href="finds.html">Browse the find system</a>
+              <a class="button button-secondary" href="editorial-standards.html">Read our standards</a>
             </div>
           </div>
 
-          <aside class="hero-card" aria-label="CueCart Finds brand focus">
-            <div class="card-badge">Selective, not random</div>
-            <h2>Finds with a reason to exist.</h2>
+          <aside class="hero-card signal-card" aria-label="CueCart Finds product selection system">
+            <div class="card-badge">Built for better picks</div>
+            <h2>Every find needs a reason.</h2>
             <p>
-              CueCart Finds looks for products that are useful, easy to understand, and affordable
-              enough for everyday consideration.
+              The brand is set up around repeatable product signals: usefulness, affordability,
+              visual clarity, affiliate fit, and trust.
             </p>
-            <ul class="mini-list">
-              <li>Home and lifestyle upgrades</li>
-              <li>Simple gadgets and organizers</li>
-              <li>Smart buys under $50</li>
-            </ul>
+            <dl class="signal-list">
+              <div>
+                <dt>Demand</dt>
+                <dd>Is the product searched, shared, or socially obvious?</dd>
+              </div>
+              <div>
+                <dt>Demo</dt>
+                <dd>Can someone understand the benefit quickly?</dd>
+              </div>
+              <div>
+                <dt>Value</dt>
+                <dd>Does it feel affordable enough for casual discovery?</dd>
+              </div>
+            </dl>
           </aside>
         </div>
       </section>
 
-      <section class="section" id="about">
-        <div class="container narrow">
-          <p class="section-kicker">What CueCart Finds Is</p>
-          <!-- EDIT ABOUT COPY HERE -->
-          <h2>A cleaner way to discover useful products.</h2>
-          <p>
-            CueCart Finds is a curated product-discovery brand focused on practical, affordable,
-            visually understandable finds. The goal is to highlight products that solve real
-            everyday problems, improve simple routines, or make smart buying easier.
-          </p>
+      <section class="section section-muted">
+        <div class="container">
+          <div class="section-heading">
+            <p class="section-kicker">Affiliate-ready foundation</p>
+            <h2>More than a one-page website.</h2>
+            <p>
+              This site now has a structure for future product pages, category lanes,
+              outbound affiliate links, disclosure pages, analytics hooks, and simple editing.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature-card">
+              <span class="feature-number">01</span>
+              <h3>Product catalog</h3>
+              <p>Editable product data powers cards, category pages, and detail pages.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-number">02</span>
+              <h3>Trust and compliance</h3>
+              <p>Disclosure, privacy, editorial standards, and clear affiliate language are included.</p>
+            </article>
+            <article class="feature-card">
+              <span class="feature-number">03</span>
+              <h3>Growth hooks</h3>
+              <p>Outbound click events can connect to analytics when you are ready.</p>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section class="section section-muted" id="lanes">
+      <section class="section" id="lanes">
         <div class="container">
           <div class="section-heading">
             <p class="section-kicker">Content Lanes</p>
             <h2>Focused categories for practical discovery.</h2>
             <p>
-              CueCart Finds is built around clear product lanes so recommendations feel useful,
-              consistent, and easy to follow.
+              CueCart Finds is organized around clean lanes so recommendations feel selective,
+              memorable, and easy to trust.
             </p>
           </div>
 
           <div class="card-grid">
-            <article class="lane-card">
+            <a class="lane-card linked-card" href="smart-buys-under-50.html">
               <div class="lane-icon" aria-hidden="true">$</div>
               <h3>Smart Buys Under $50</h3>
               <p>Affordable finds that feel useful, giftable, or worth considering without overthinking.</p>
-            </article>
+            </a>
 
-            <article class="lane-card">
+            <a class="lane-card linked-card" href="useful-home-finds.html">
               <div class="lane-icon" aria-hidden="true">H</div>
               <h3>Useful Home Finds</h3>
               <p>Simple home, kitchen, cleaning, and organization products that make routines easier.</p>
-            </article>
+            </a>
 
-            <article class="lane-card">
-              <div class="lane-icon" aria-hidden="true">✓</div>
+            <a class="lane-card linked-card" href="everyday-problem-solvers.html">
+              <div class="lane-icon" aria-hidden="true">OK</div>
               <h3>Everyday Problem-Solvers</h3>
               <p>Products with a clear purpose, quick visual explanation, and practical everyday benefit.</p>
-            </article>
+            </a>
           </div>
         </div>
       </section>
 
-      <section class="section" id="why-follow">
+      <section class="section section-muted">
         <div class="container split">
           <div>
-            <p class="section-kicker">Why Follow CueCart Finds</p>
-            <h2>Useful recommendations without the noisy deal-site feel.</h2>
+            <p class="section-kicker">Buyer Promise</p>
+            <h2>Trust over hype, always.</h2>
+            <p>
+              CueCart Finds may earn from affiliate links, but the brand is designed to protect
+              trust first. Recommendations should be useful, clearly explained, and easy to evaluate.
+            </p>
           </div>
 
           <div class="trust-list">
@@ -156,7 +201,7 @@
             </div>
             <div class="trust-item">
               <strong>Affordable focus</strong>
-              <span>The brand prioritizes low-friction smart buys and useful everyday upgrades.</span>
+              <span>The brand prioritizes low-friction smart buys and everyday upgrades.</span>
             </div>
             <div class="trust-item">
               <strong>Clear recommendations</strong>
@@ -166,33 +211,26 @@
               <strong>Curated over random</strong>
               <span>The goal is selective product discovery, not endless clutter or spammy urgency.</span>
             </div>
-            <div class="trust-item">
-              <strong>Trust over hype</strong>
-              <span>CueCart Finds avoids fake urgency, exaggerated claims, and low-quality sales language.</span>
-            </div>
           </div>
         </div>
       </section>
 
-      <section class="section contact-section" id="contact">
-        <div class="container contact-card">
+      <section class="section">
+        <div class="container cta-panel">
           <div>
-            <p class="section-kicker">Contact</p>
-            <h2>Reach CueCart Finds</h2>
+            <p class="section-kicker">Start exploring</p>
+            <h2>See the product discovery structure.</h2>
             <p>
-              For brand inquiries, affiliate program communication, or general questions, contact
-              CueCart Finds by email.
+              The current product cards are research-ready placeholders. Add exact products and
+              approved affiliate links when your affiliate accounts are active.
             </p>
           </div>
-
-          <!-- EDIT EMAIL ADDRESS HERE -->
-          <a class="email-link" href="mailto:CueCartFinds@gmail.com">CueCartFinds@gmail.com</a>
+          <a class="button button-primary" href="finds.html">Open finds</a>
         </div>
       </section>
 
       <section class="disclosure" aria-label="Affiliate disclosure">
         <div class="container">
-          <!-- EDIT AFFILIATE DISCLOSURE HERE -->
           <p>CueCart Finds may earn from qualifying purchases through affiliate links.</p>
         </div>
       </section>
@@ -201,6 +239,12 @@
     <footer class="site-footer">
       <div class="container footer-content">
         <span>CueCart Finds</span>
+        <nav aria-label="Footer navigation">
+          <a href="about.html">About</a>
+          <a href="disclosure.html">Affiliate Disclosure</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="contact.html">Contact</a>
+        </nav>
         <span>&copy; <span id="year">2026</span> CueCart Finds. All rights reserved.</span>
       </div>
     </footer>

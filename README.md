@@ -1,108 +1,211 @@
-# CueCart Finds Static Website
+# CueCart Finds Website
 
-Simple GitHub Pages-ready landing page for CueCart Finds.
+GitHub Pages-ready affiliate brand foundation for CueCart Finds.
 
-This site uses only:
+This is a static website. It has no backend, no database, no build step, no npm install, and no paid service requirement.
 
-- `index.html`
-- `style.css`
-- `script.js`
-- image assets in `assets/`
+## What This Site Includes
 
-There is no build step, no backend, no npm install, and no paid service required.
+- Homepage trust layer
+- Product discovery catalog
+- Product detail page template
+- Three content lanes
+- Affiliate disclosure page
+- Editorial standards page
+- Privacy page
+- Contact page
+- Custom 404 page
+- Product data file
+- SEO files
+- Analytics-ready outbound click hooks
 
 ## Recommended File Structure
 
 ```text
 cuecart-finds-site/
 ├── index.html
+├── finds.html
+├── product.html
+├── smart-buys-under-50.html
+├── useful-home-finds.html
+├── everyday-problem-solvers.html
+├── about.html
+├── editorial-standards.html
+├── contact.html
+├── disclosure.html
+├── privacy.html
+├── 404.html
 ├── style.css
 ├── script.js
+├── robots.txt
+├── sitemap.xml
+├── site.webmanifest
 ├── README.md
+├── OPERATIONS.md
+├── data/
+│   └── products.js
 └── assets/
     ├── cuecart-finds-favicon.ico
     ├── cuecart-finds-icon-192.png
-    └── cuecart-finds-logo-web-600.png
+    ├── cuecart-finds-logo-web-600.png
+    └── product-placeholder.svg
 ```
 
-## GitHub Repository Naming
+## GitHub Repository Name
 
-For a main GitHub user site, name the repository:
+For the live site URL:
 
 ```text
-YOUR-GITHUB-USERNAME.github.io
+https://cuecartfinds.github.io/
 ```
 
-Example:
+the repository should be named:
 
 ```text
-matodobra.github.io
+cuecartfinds.github.io
 ```
 
-That creates a site at:
+under the GitHub account or organization:
 
 ```text
-https://YOUR-GITHUB-USERNAME.github.io/
+cuecartfinds
 ```
 
-If you do not want this to be your main GitHub Pages site, you can name the repository:
+## Deploy on GitHub Pages
+
+1. Open the repository on GitHub.
+2. Click `Add file`.
+3. Click `Upload files`.
+4. Upload the files and folders from this directory.
+5. Make sure `index.html` is in the repository root.
+6. Do not upload this whole folder inside another folder.
+7. Click `Commit changes`.
+8. Go to `Settings`.
+9. Click `Pages`.
+10. Under `Build and deployment`, choose `Deploy from a branch`.
+11. Choose branch `main`.
+12. Choose folder `/root`.
+13. Click `Save`.
+
+The site should publish at:
 
 ```text
-cuecart-finds
+https://cuecartfinds.github.io/
 ```
 
-That creates a project site at:
+## How to Add a Real Affiliate Product
+
+Open:
 
 ```text
-https://YOUR-GITHUB-USERNAME.github.io/cuecart-finds/
+data/products.js
 ```
 
-## GitHub Pages Deployment Steps
+Copy one product object and edit:
 
-1. Create a new public GitHub repository.
-2. Use `YOUR-GITHUB-USERNAME.github.io` if this should be your main user site.
-3. Upload all files from this folder into the repository root.
-4. Make sure `index.html` is in the root of the repository, not inside another nested folder.
-5. Go to the repository on GitHub.
-6. Click `Settings`.
-7. Click `Pages` in the left menu.
-8. Under `Build and deployment`, choose:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/root`
-9. Click `Save`.
-10. Wait a minute or two for GitHub Pages to publish.
+- `slug`
+- `title`
+- `category`
+- `lane`
+- `priceLabel`
+- `merchant`
+- `affiliateUrl`
+- `image`
+- `imageAlt`
+- `hook`
+- `benefit`
+- `whyWeLike`
+- `bestFor`
+- `signals`
+- `tags`
+
+When the product has a real approved affiliate link, change:
+
+```js
+status: "researching"
+```
+
+to:
+
+```js
+status: "live"
+```
+
+and add the real URL:
+
+```js
+affiliateUrl: "https://your-approved-affiliate-link-here"
+```
+
+Do not add fake affiliate links.
+
+## Product Lanes
+
+Use one of these lane values:
+
+```text
+smart-buys-under-50
+useful-home-finds
+everyday-problem-solvers
+```
+
+The lane controls which category page the product appears on.
+
+## Analytics Notes
+
+Outbound affiliate clicks are ready for analytics.
+
+If you later add Google Analytics, Plausible, or Google Tag Manager, `script.js` will emit an `affiliate_click` event.
+
+Without analytics installed, the site still works normally.
+
+## Affiliate and Compliance Notes
+
+Keep these pages live:
+
+- `disclosure.html`
+- `editorial-standards.html`
+- `privacy.html`
+- `contact.html`
+
+These help the site look more legitimate for affiliate program review and make the brand more trustworthy for visitors.
 
 ## Beginner Editing Guide
 
 Edit `index.html` to change:
 
-- site title
+- homepage headline
 - brand tagline
-- section copy
-- contact email
-- affiliate disclosure
-- logo file path
+- homepage section copy
+
+Edit `data/products.js` to change:
+
+- products
+- affiliate links
+- merchant/source info
+- product copy
 
 Edit `style.css` to change:
 
 - colors
 - spacing
 - card styles
-- mobile/desktop layout
+- layout
 
 Edit `script.js` only if you want to change:
 
-- mobile menu behavior
-- footer year behavior
+- product rendering
+- filters
+- affiliate click tracking behavior
 
-## Logo Notes
+## Important Public Repo Warning
 
-The current logo path is:
+If this repository is public, do not store private information in it.
 
-```html
-assets/cuecart-finds-logo-web-600.png
-```
+Do not publish:
 
-If you upload a different logo later, place it in `assets/` and update the `src` attribute in `index.html`.
-
+- passwords
+- API keys
+- affiliate account logins
+- private commission reports
+- private revenue numbers

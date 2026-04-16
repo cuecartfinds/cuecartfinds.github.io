@@ -1,0 +1,16 @@
+{
+  "name": "CueCart Finds",
+  "short_name": "CueCart",
+  "description": "Useful, affordable product discovery for home, life, and everyday wins.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6fafb",
+  "theme_color": "#08213f",
+  "icons": [
+    {
+      "src": "assets/cuecart-finds-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
