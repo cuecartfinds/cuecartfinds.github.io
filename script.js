@@ -63,6 +63,15 @@ function getProductDetailUrl(product) {
   return `product.html?product=${encodeURIComponent(product.slug)}`;
 }
 
+function laneLabel(product) {
+  const lanes = {
+    "smart-buys-under-50": "Smart Buy Under $50",
+    "useful-home-finds": "Useful Home Find",
+    "everyday-problem-solvers": "Everyday Problem-Solver"
+  };
+  return lanes[product.lane] || product.category || "CueCart Find";
+}
+
 function withTrackingParams(rawUrl, product) {
   if (!rawUrl) {
     return "";
@@ -142,22 +151,31 @@ function productCard(product) {
 
   return `
     <article class="product-card">
-      <img
-        class="product-image"
-        src="${escapeHtml(productImage(product))}"
-        alt="${escapeHtml(productImageAlt(product))}"
-        loading="lazy"
-        onerror="this.onerror=null; this.src='assets/product-placeholder.svg';"
-      />
+      <a class="product-image-link" href="${escapeHtml(getProductDetailUrl(product))}" aria-label="View details for ${escapeHtml(title)}">
+        <img
+          class="product-image"
+          src="${escapeHtml(productImage(product))}"
+          alt="${escapeHtml(productImageAlt(product))}"
+          loading="lazy"
+          onerror="this.onerror=null; this.src='assets/product-placeholder.svg';"
+        />
+      </a>
       <div class="product-card-body">
         <div class="product-meta-row">
           <span class="${statusClass}">${escapeHtml(getStatusLabel(product))}</span>
           <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
         </div>
+        <div class="product-context-row">
+          <span>${escapeHtml(laneLabel(product))}</span>
+          <span>${escapeHtml(product.merchant || "Merchant pending")}</span>
+        </div>
         <h2>${escapeHtml(title)}</h2>
         <p class="product-card-blurb">${escapeHtml(blurb)}</p>
         <p class="product-card-why">${escapeHtml(why)}</p>
         <div class="tag-list">${tags}</div>
+        <p class="card-disclosure">
+          ${product.affiliateUrl ? "Affiliate link disclosure applies." : "Non-affiliate destination may be used while approvals are pending."}
+        </p>
         <div class="product-actions">
           <a class="button button-secondary" href="${escapeHtml(getProductDetailUrl(product))}">View details</a>
           ${affiliateAction(product)}
@@ -167,7 +185,7 @@ function productCard(product) {
   `;
 }
 
-function renderProductGrid(target, productList, emptyMessage) {
+function renderProductGrid(target, productList, emptyMessage, emptyTitle = "No public finds are live yet.") {
   if (!target) {
     return;
   }
@@ -175,8 +193,8 @@ function renderProductGrid(target, productList, emptyMessage) {
   if (!productList.length) {
     target.innerHTML = `
       <div class="empty-state">
-        <p class="eyebrow">No matches</p>
-        <h2>No finds matched that filter.</h2>
+        <p class="eyebrow">Coming soon</p>
+        <h2>${escapeHtml(emptyTitle)}</h2>
         <p>${escapeHtml(emptyMessage || "Try another search or category.")}</p>
       </div>
     `;
@@ -202,12 +220,14 @@ function setupHomeFinds() {
   renderProductGrid(
     featuredGrid,
     featured,
-    "Featured finds will appear here after products are approved in the private CueCart dashboard."
+    "Featured finds will appear here after products are approved, marked live, and exported from the private CueCart dashboard.",
+    "Featured finds are being reviewed."
   );
   renderProductGrid(
     latestGrid,
     latest,
-    "Latest finds will appear here after the first public product export."
+    "Latest finds will appear here after the first public product export.",
+    "Latest finds are not published yet."
   );
 }
 
@@ -251,7 +271,7 @@ function setupCatalogPage() {
       status.textContent = `${filtered.length} of ${products.length} finds shown`;
     }
 
-    renderProductGrid(grid, filtered, "Try clearing your search or choosing all finds.");
+    renderProductGrid(grid, filtered, "Try clearing your search or choosing all finds.", "No finds matched that filter.");
   }
 
   filterButtons.forEach((button) => {
@@ -281,7 +301,7 @@ function setupCategoryPage() {
     status.textContent = `${filtered.length} finds in this lane`;
   }
 
-  renderProductGrid(grid, filtered, "This lane is ready for future product additions.");
+  renderProductGrid(grid, filtered, "This lane is ready for future product additions.", "No finds are live in this lane yet.");
 }
 
 function setupProductDetailPage() {
@@ -350,11 +370,12 @@ function setupProductDetailPage() {
         />
       </div>
       <div class="product-detail-content">
-        <p class="eyebrow">${escapeHtml(product.category)}</p>
+        <p class="eyebrow">${escapeHtml(laneLabel(product))}</p>
         <h1>${escapeHtml(title)}</h1>
         <div class="product-meta-row">
           <span class="${product.status === "live" ? "status-badge live" : "status-badge"}">${escapeHtml(getStatusLabel(product))}</span>
           <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
+          <span class="merchant-pill">${escapeHtml(product.merchant || "Merchant pending")}</span>
         </div>
         <p class="hero-text">${escapeHtml(blurb)}</p>
         <p>${escapeHtml(why)}</p>
