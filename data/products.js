@@ -8,48 +8,33 @@ window.CUECART_PRODUCTS = [
     "slug": "posture-corrector-strap-9",
     "id": "ccf-0009",
     "product_name": "Posture Corrector Strap",
-    "title": "Posture Corrector Strap",
     "category": "Wellness",
     "lane": "smart-buys-under-50",
     "price": 21.99,
     "priceLabel": "$21.99",
-    "status": "live",
-    "decision": "test",
-    "overall_score": null,
     "merchant": "Walmart",
-    "affiliate_program": "Walmart Affiliate Program",
     "affiliateUrl": "",
     "product_url": "https://business.walmart.com/ip/Posture-Corrector-for-Women-and-Men-Back-Support-Shoulder-Posture-Support-to-Improve-Posture-L/17674353632",
     "routing_url": "/product.html?product=posture-corrector-strap-9",
-    "utm_slug": "pinterest_posture-corrector-strap",
-    "publish_status": "packet_ready",
-    "published_at": "2026-04-18T03:29:34.108644",
     "cta": "Check current price",
     "short_blurb": "A low-cost posture reminder strap for desk days, studying, or long laptop sessions.",
     "why_it_matters": "The value is easy to understand quickly: adjust the strap, wear it during seated work, and use it as a physical cue when your shoulders start drifting forward.",
+    "benefitCards": [
+      "Clear use case: Posture Corrector Strap is easy to understand without a long explanation.",
+      "Practical price point: $21.99 keeps it in low-friction discovery territory.",
+      "Simple to compare: check the details at Walmart and decide if it fits your wellness routine."
+    ],
     "image": "assets/product-placeholder.svg",
     "imageAlt": "Posture Corrector Strap product image.",
-    "hook": "A low-cost posture reminder strap for desk days, studying, or long laptop sessions.",
-    "benefit": "The value is easy to understand quickly: adjust the strap, wear it during seated work, and use it as a physical cue when your shoulders start drifting forward.",
-    "whyWeLike": "Clear use case, under-$25 positioning, and an easy visual demo make this a good manual test.",
     "bestFor": [
       "desk work",
       "study sessions",
       "posture habit reminders"
     ],
-    "signals": {
-      "demand": "Approved in CueCart operator workflow",
-      "visual": "Selected for clear short-form product explanation",
-      "price": "$21.99",
-      "affiliateFit": "Walmart affiliate routing configured",
-      "profitability": "59.4"
-    },
-    "tags": [
-      "wellness",
-      "desk-setup",
-      "under-50",
-      "habit-helper"
-    ],
+    "cuecartTake": "This is a practical reminder-style find, not a medical fix. It makes the most sense for people who want a simple cue during desk, laptop, or study time.",
+    "videoDemoIdea": "Show it in a simple desk setup as a visual posture reminder during laptop or study time.",
+    "disclosureRequired": false,
+    "relatedProducts": [],
     "updated": "2026-04-18"
   }
 ];

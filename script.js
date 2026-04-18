@@ -43,22 +43,6 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function getStatusLabel(product) {
-  if (product.affiliateUrl) {
-    return "Live affiliate link";
-  }
-
-  if (product.product_url) {
-    return "Non-affiliate test link";
-  }
-
-  if (product.status === "draft") {
-    return "Draft";
-  }
-
-  return "Affiliate source pending";
-}
-
 function getProductDetailUrl(product) {
   return `product.html?product=${encodeURIComponent(product.slug)}`;
 }
@@ -99,7 +83,7 @@ function withTrackingParams(rawUrl, product) {
       url.searchParams.set("utm_medium", "affiliate_site");
     }
     if (!url.searchParams.has("utm_campaign")) {
-      url.searchParams.set("utm_campaign", product.utm_slug || product.slug);
+      url.searchParams.set("utm_campaign", product.slug);
     }
     return url.toString();
   } catch (_error) {
@@ -141,7 +125,34 @@ function productBlurb(product) {
 }
 
 function productWhy(product) {
-  return product.why_it_matters || product.benefit || product.whyWeLike || "Chosen for usefulness, clear value, and everyday product discovery.";
+  return product.why_it_matters || product.benefit || "Chosen for usefulness, clear value, and everyday product discovery.";
+}
+
+function productBenefitCards(product) {
+  const title = productTitle(product);
+  const merchant = product.merchant || "the retailer";
+  const price = product.priceLabel || "Price varies";
+  const cards = Array.isArray(product.benefitCards) ? product.benefitCards : [];
+  const fallbackCards = [
+    `${title} has a clear everyday use case, so the value should be quick to understand.`,
+    `${price} keeps it in the kind of low-friction range CueCart Finds likes to compare.`,
+    `You can check the details at ${merchant} before deciding if it fits your routine.`
+  ];
+
+  return [...cards, ...fallbackCards].filter(Boolean).slice(0, 3);
+}
+
+function productBestFor(product) {
+  const values = Array.isArray(product.bestFor) ? product.bestFor : [];
+  return values.length ? values : ["Everyday use", "Quick comparison", "Practical gifting"];
+}
+
+function productCueCartTake(product) {
+  return product.cuecartTake || "CueCart looks for practical finds that are easy to understand, fairly priced, and useful without needing hype.";
+}
+
+function productVideoIdea(product) {
+  return product.videoDemoIdea || `Show ${productTitle(product)} in a real everyday setting with one clear before-and-after moment.`;
 }
 
 function productImage(product) {
@@ -157,14 +168,9 @@ function productImageAlt(product) {
 }
 
 function productCard(product) {
-  const statusClass = product.status === "live" ? "status-badge live" : "status-badge";
   const title = productTitle(product);
   const blurb = productBlurb(product);
   const why = productWhy(product);
-  const tags = (product.tags || [])
-    .slice(0, 4)
-    .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
-    .join("");
 
   return `
     <article class="product-card">
@@ -185,22 +191,18 @@ function productCard(product) {
       </a>
       <div class="product-card-body">
         <div class="product-meta-row">
-          <span class="${statusClass}">${escapeHtml(getStatusLabel(product))}</span>
+          <span class="category-badge">${escapeHtml(laneLabel(product))}</span>
           <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
-        </div>
-        <div class="product-context-row">
-          <span>${escapeHtml(laneLabel(product))}</span>
-          <span>${escapeHtml(product.merchant || "Merchant pending")}</span>
+          <span class="merchant-pill">${escapeHtml(product.merchant || "Merchant pending")}</span>
         </div>
         <h2>${escapeHtml(title)}</h2>
         <p class="product-card-blurb">${escapeHtml(blurb)}</p>
         <p class="product-card-why">${escapeHtml(why)}</p>
-        <div class="tag-list">${tags}</div>
         <p class="card-disclosure">
-          ${product.affiliateUrl ? "Affiliate link disclosure applies." : "Non-affiliate destination may be used while approvals are pending."}
+          ${product.disclosureRequired ? "CueCart may earn from qualifying purchases." : "Retailer link. CueCart does not sell this product directly."}
         </p>
         <div class="product-actions">
-          <a class="button button-secondary" href="${escapeHtml(getProductDetailUrl(product))}">View details</a>
+          <a class="button button-secondary" href="${escapeHtml(getProductDetailUrl(product))}">View Find</a>
           ${affiliateAction(product)}
         </div>
       </div>
@@ -234,7 +236,7 @@ function setupHomeFinds() {
     return;
   }
 
-  const liveOrReady = products.filter((product) => product.status === "live" || product.product_url || product.affiliateUrl);
+  const liveOrReady = products.filter((product) => product.product_url || product.affiliateUrl);
   const source = liveOrReady.length ? liveOrReady : products;
   const featuredLane = source.filter((product) => product.lane === "smart-buys-under-50");
   const featured = (featuredLane.length ? featuredLane : source).slice(0, 3);
@@ -243,14 +245,14 @@ function setupHomeFinds() {
   renderProductGrid(
     featuredGrid,
     featured,
-    "Featured finds will appear here after products are approved, marked live, and exported from the private CueCart dashboard.",
-    "Featured finds are being reviewed."
+    "Featured finds will appear here as soon as the next curated picks are ready.",
+    "Featured finds are coming soon."
   );
   renderProductGrid(
     latestGrid,
     latest,
-    "Latest finds will appear here after the first public product export.",
-    "Latest finds are not published yet."
+    "Latest finds will appear here after the next CueCart update.",
+    "Latest finds are coming soon."
   );
 }
 
@@ -279,9 +281,7 @@ function setupCatalogPage() {
         product.short_blurb,
         product.benefit,
         product.why_it_matters,
-        product.whyWeLike,
         product.merchant,
-        ...(product.tags || []),
         ...(product.bestFor || [])
       ]
         .join(" ")
@@ -357,87 +357,154 @@ function setupProductDetailPage() {
   const title = productTitle(product);
   const blurb = productBlurb(product);
   const why = productWhy(product);
+  const benefitCards = productBenefitCards(product)
+    .map(
+      (item) => `
+        <article class="benefit-card">
+          <span>Worth noting</span>
+          <p>${escapeHtml(item)}</p>
+        </article>
+      `
+    )
+    .join("");
+  const bestFor = productBestFor(product)
+    .map((item) => `<span class="use-chip">${escapeHtml(item)}</span>`)
+    .join("");
+  const relatedMarkup = relatedFindsMarkup(product);
 
   document.title = `${title} | CueCart Finds`;
 
-  const bestFor = (product.bestFor || [])
-    .map((item) => `<li>${escapeHtml(item)}</li>`)
-    .join("") || "<li>Everyday product discovery</li>";
-  const tags = (product.tags || [])
-    .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
-    .join("");
-  const signals = Object.entries(product.signals || {})
-    .map(
-      ([label, value]) => `
-        <div class="signal-chip">
-          <strong>${escapeHtml(label)}</strong>
-          <span>${escapeHtml(value)}</span>
+  root.innerHTML = `
+    <article class="product-detail-card consumer-product-page">
+      <nav class="breadcrumb-row" aria-label="Product navigation">
+        <a href="finds.html">All finds</a>
+        <span>/</span>
+        <a href="${escapeHtml(product.lane || "finds")}.html">${escapeHtml(laneLabel(product))}</a>
+      </nav>
+
+      <section class="product-detail-hero" aria-label="${escapeHtml(title)} product overview">
+        <div class="product-detail-media">
+          <div class="product-visual detail-visual ${hasRealProductImage(product) ? "" : "image-missing"}">
+            ${hasRealProductImage(product) ? `
+              <img
+                class="product-image"
+                src="${escapeHtml(productImage(product))}"
+                alt="${escapeHtml(productImageAlt(product))}"
+                onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+              />
+            ` : ""}
+            <span class="product-visual-fallback">
+              <span>${escapeHtml(laneLabel(product))}</span>
+              <strong>${escapeHtml(title)}</strong>
+            </span>
+          </div>
         </div>
+
+        <div class="product-detail-content">
+          <p class="eyebrow">${escapeHtml(laneLabel(product))}</p>
+          <h1>${escapeHtml(title)}</h1>
+          <p class="product-value-prop">${escapeHtml(blurb)}</p>
+          <div class="shop-meta">
+            <span>${escapeHtml(product.priceLabel || "Price varies")}</span>
+            <span>${escapeHtml(product.merchant || "Merchant pending")}</span>
+          </div>
+          <div class="product-actions detail-actions">
+            ${affiliateAction(product)}
+            <a class="button button-secondary" href="finds.html">Back to finds</a>
+          </div>
+          <p class="product-disclosure">
+            ${product.disclosureRequired ? "Affiliate disclosure: CueCart Finds may earn from qualifying purchases through this link." : "Disclosure: CueCart Finds may earn from qualifying purchases through affiliate links when available. This retailer link is provided for product reference."}
+          </p>
+        </div>
+      </section>
+
+      <section class="detail-section">
+        <div class="section-heading compact-heading">
+          <p class="section-kicker">Why it is worth a look</p>
+          <h2>A practical find with a clear job.</h2>
+          <p>${escapeHtml(why)}</p>
+        </div>
+        <div class="benefit-grid">${benefitCards}</div>
+      </section>
+
+      <section class="detail-section detail-note-grid">
+        <div class="detail-note-card">
+          <p class="section-kicker">Best for</p>
+          <div class="use-chip-grid">${bestFor}</div>
+        </div>
+        <div class="detail-note-card">
+          <p class="section-kicker">CueCart take</p>
+          <p>${escapeHtml(productCueCartTake(product))}</p>
+        </div>
+        <div class="detail-note-card">
+          <p class="section-kicker">Quick demo idea</p>
+          <p>${escapeHtml(productVideoIdea(product))}</p>
+        </div>
+      </section>
+
+      ${relatedMarkup}
+    </article>
+  `;
+}
+
+function relatedFindsMarkup(product) {
+  const relatedSlugs = Array.isArray(product.relatedProducts) ? product.relatedProducts : [];
+  const related = relatedSlugs
+    .map((slug) => products.find((item) => item.slug === slug))
+    .filter(Boolean)
+    .slice(0, 3);
+
+  if (!related.length) {
+    return `
+      <section class="related-panel">
+        <div>
+          <p class="section-kicker">Related finds</p>
+          <h2>Browse more practical picks.</h2>
+          <p>More related products will appear here as CueCart Finds publishes additional curated picks.</p>
+        </div>
+        <div class="related-link-row">
+          <a class="button button-secondary" href="smart-buys-under-50.html">Smart Buys Under $50</a>
+          <a class="button button-secondary" href="finds.html">All Finds</a>
+        </div>
+      </section>
+    `;
+  }
+
+  const cards = related
+    .map(
+      (item) => `
+        <a class="related-card linked-card" href="${escapeHtml(getProductDetailUrl(item))}">
+          <div class="related-thumb product-visual ${hasRealProductImage(item) ? "" : "image-missing"}">
+            ${hasRealProductImage(item) ? `
+              <img
+                class="product-image"
+                src="${escapeHtml(productImage(item))}"
+                alt="${escapeHtml(productImageAlt(item))}"
+                loading="lazy"
+                onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+              />
+            ` : ""}
+            <span class="product-visual-fallback">
+              <span>${escapeHtml(laneLabel(item))}</span>
+              <strong>${escapeHtml(productTitle(item))}</strong>
+            </span>
+          </div>
+          <span class="category-badge">${escapeHtml(laneLabel(item))}</span>
+          <strong>${escapeHtml(productTitle(item))}</strong>
+          <small>${escapeHtml(item.priceLabel || "Price varies")} · ${escapeHtml(item.merchant || "Merchant pending")}</small>
+        </a>
       `
     )
-    .join("") || `
-      <div class="signal-chip">
-        <strong>Selection</strong>
-        <span>Approved through the CueCart Finds operator workflow.</span>
-      </div>
-    `;
+    .join("");
 
-  root.innerHTML = `
-    <article class="product-detail-card">
-      <div class="product-detail-media">
-        <div class="product-visual detail-visual ${hasRealProductImage(product) ? "" : "image-missing"}">
-          ${hasRealProductImage(product) ? `
-            <img
-              class="product-image"
-              src="${escapeHtml(productImage(product))}"
-              alt="${escapeHtml(productImageAlt(product))}"
-              onerror="this.parentElement.classList.add('image-missing'); this.remove();"
-            />
-          ` : ""}
-          <span class="product-visual-fallback">
-            <span>${escapeHtml(laneLabel(product))}</span>
-            <strong>${escapeHtml(title)}</strong>
-          </span>
-        </div>
+  return `
+    <section class="related-panel">
+      <div class="section-heading compact-heading">
+        <p class="section-kicker">Related finds</p>
+        <h2>More picks worth comparing.</h2>
       </div>
-      <div class="product-detail-content">
-        <p class="eyebrow">${escapeHtml(laneLabel(product))}</p>
-        <h1>${escapeHtml(title)}</h1>
-        <div class="product-meta-row">
-          <span class="${product.status === "live" ? "status-badge live" : "status-badge"}">${escapeHtml(getStatusLabel(product))}</span>
-          <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
-          <span class="merchant-pill">${escapeHtml(product.merchant || "Merchant pending")}</span>
-        </div>
-        <p class="hero-text">${escapeHtml(blurb)}</p>
-        <p>${escapeHtml(why)}</p>
-        <div class="product-actions">
-          ${affiliateAction(product)}
-          <a class="button button-secondary" href="finds.html">Back to all finds</a>
-        </div>
-        <p class="product-disclosure">
-          ${product.affiliateUrl ? "Disclosure: CueCart Finds may earn from qualifying purchases through this link." : "This may use a non-affiliate destination while affiliate approvals are pending."}
-        </p>
-        <ul class="detail-list">
-          <li>
-            <strong>Why it fits CueCart</strong>
-            ${escapeHtml(product.whyWeLike || why)}
-          </li>
-          <li>
-            <strong>Merchant status</strong>
-            ${escapeHtml(product.merchant)}
-          </li>
-          <li>
-            <strong>Updated</strong>
-            ${escapeHtml(product.updated)}
-          </li>
-        </ul>
-        <h2>Best for</h2>
-        <ul class="detail-list">${bestFor}</ul>
-        <h2>Product signals</h2>
-        <div class="signals-grid">${signals}</div>
-        <div class="tag-list">${tags}</div>
-      </div>
-    </article>
+      <div class="related-grid">${cards}</div>
+    </section>
   `;
 }
 
