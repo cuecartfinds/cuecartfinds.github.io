@@ -604,6 +604,15 @@ h3 {
   color: var(--muted);
 }
 
+.product-card-blurb {
+  font-weight: 720;
+  color: var(--ink) !important;
+}
+
+.product-card-why {
+  font-size: 0.95rem;
+}
+
 .product-actions {
   display: flex;
   flex-wrap: wrap;
@@ -665,6 +674,15 @@ h3 {
 .detail-list strong {
   display: block;
   color: var(--navy);
+}
+
+.product-disclosure {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: rgba(24, 174, 180, 0.1);
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 .signals-grid {

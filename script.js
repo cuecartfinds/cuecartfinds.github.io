@@ -110,11 +110,31 @@ function affiliateAction(product) {
   `;
 }
 
+function productTitle(product) {
+  return product.product_name || product.title || "CueCart Find";
+}
+
+function productBlurb(product) {
+  return product.short_blurb || product.hook || "A practical product find selected by CueCart Finds.";
+}
+
+function productWhy(product) {
+  return product.why_it_matters || product.benefit || product.whyWeLike || "Chosen for usefulness, clear value, and everyday product discovery.";
+}
+
+function productImage(product) {
+  return product.image || "assets/product-placeholder.svg";
+}
+
+function productImageAlt(product) {
+  return product.imageAlt || `${productTitle(product)} product image.`;
+}
+
 function productCard(product) {
   const statusClass = product.status === "live" ? "status-badge live" : "status-badge";
-  const title = product.product_name || product.title;
-  const blurb = product.short_blurb || product.hook;
-  const why = product.why_it_matters || product.benefit;
+  const title = productTitle(product);
+  const blurb = productBlurb(product);
+  const why = productWhy(product);
   const tags = (product.tags || [])
     .slice(0, 4)
     .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
@@ -122,15 +142,21 @@ function productCard(product) {
 
   return `
     <article class="product-card">
-      <img class="product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.imageAlt)}" loading="lazy" />
+      <img
+        class="product-image"
+        src="${escapeHtml(productImage(product))}"
+        alt="${escapeHtml(productImageAlt(product))}"
+        loading="lazy"
+        onerror="this.onerror=null; this.src='assets/product-placeholder.svg';"
+      />
       <div class="product-card-body">
         <div class="product-meta-row">
           <span class="${statusClass}">${escapeHtml(getStatusLabel(product))}</span>
           <span class="price-pill">${escapeHtml(product.priceLabel)}</span>
         </div>
         <h2>${escapeHtml(title)}</h2>
-        <p>${escapeHtml(blurb)}</p>
-        <p>${escapeHtml(why)}</p>
+        <p class="product-card-blurb">${escapeHtml(blurb)}</p>
+        <p class="product-card-why">${escapeHtml(why)}</p>
         <div class="tag-list">${tags}</div>
         <div class="product-actions">
           <a class="button button-secondary" href="${escapeHtml(getProductDetailUrl(product))}">View details</a>
@@ -169,7 +195,8 @@ function setupHomeFinds() {
 
   const liveOrReady = products.filter((product) => product.status === "live" || product.product_url || product.affiliateUrl);
   const source = liveOrReady.length ? liveOrReady : products;
-  const featured = source.filter((product) => product.lane === "smart-buys-under-50").slice(0, 3);
+  const featuredLane = source.filter((product) => product.lane === "smart-buys-under-50");
+  const featured = (featuredLane.length ? featuredLane : source).slice(0, 3);
   const latest = [...source].slice(0, 3);
 
   renderProductGrid(
@@ -284,15 +311,15 @@ function setupProductDetailPage() {
     return;
   }
 
-  const title = product.product_name || product.title;
-  const blurb = product.short_blurb || product.hook;
-  const why = product.why_it_matters || product.benefit;
+  const title = productTitle(product);
+  const blurb = productBlurb(product);
+  const why = productWhy(product);
 
   document.title = `${title} | CueCart Finds`;
 
   const bestFor = (product.bestFor || [])
     .map((item) => `<li>${escapeHtml(item)}</li>`)
-    .join("");
+    .join("") || "<li>Everyday product discovery</li>";
   const tags = (product.tags || [])
     .map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
     .join("");
@@ -305,12 +332,22 @@ function setupProductDetailPage() {
         </div>
       `
     )
-    .join("");
+    .join("") || `
+      <div class="signal-chip">
+        <strong>Selection</strong>
+        <span>Approved through the CueCart Finds operator workflow.</span>
+      </div>
+    `;
 
   root.innerHTML = `
     <article class="product-detail-card">
       <div class="product-detail-media">
-        <img class="product-image" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.imageAlt)}" />
+        <img
+          class="product-image"
+          src="${escapeHtml(productImage(product))}"
+          alt="${escapeHtml(productImageAlt(product))}"
+          onerror="this.onerror=null; this.src='assets/product-placeholder.svg';"
+        />
       </div>
       <div class="product-detail-content">
         <p class="eyebrow">${escapeHtml(product.category)}</p>
@@ -325,6 +362,9 @@ function setupProductDetailPage() {
           ${affiliateAction(product)}
           <a class="button button-secondary" href="finds.html">Back to all finds</a>
         </div>
+        <p class="product-disclosure">
+          ${product.affiliateUrl ? "Disclosure: CueCart Finds may earn from qualifying purchases through this link." : "This may use a non-affiliate destination while affiliate approvals are pending."}
+        </p>
         <ul class="detail-list">
           <li>
             <strong>Why it fits CueCart</strong>
