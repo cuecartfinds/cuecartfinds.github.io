@@ -3,4 +3,52 @@
   Edit products in the private admin app, not directly here unless it is an emergency.
 */
 
-window.CUECART_PRODUCTS = [];
+window.CUECART_PRODUCTS = [
+  {
+    "slug": "posture-corrector-strap-9",
+    "id": "ccf-0009",
+    "product_name": "Posture Corrector Strap",
+    "title": "Posture Corrector Strap",
+    "category": "Wellness",
+    "lane": "smart-buys-under-50",
+    "price": 24.5,
+    "priceLabel": "$24.50",
+    "status": "live",
+    "decision": "test",
+    "overall_score": null,
+    "merchant": "Merchant pending",
+    "affiliate_program": null,
+    "affiliateUrl": "",
+    "product_url": "https://example.com/posture-corrector",
+    "routing_url": "/product.html?product=posture-corrector-strap-9",
+    "utm_slug": "pinterest_posture-corrector-strap",
+    "publish_status": "published",
+    "published_at": "2026-04-18T03:29:34.108644",
+    "cta": "View Find",
+    "short_blurb": "A compact product with a clear everyday benefit and strong impulse-buy appeal.",
+    "why_it_matters": "Faster setup, cleaner routine, easier habit.",
+    "image": "https://images.unsplash.com/photo-1517837016564-bfc2808c918d",
+    "imageAlt": "Posture Corrector Strap product image.",
+    "hook": "A compact product with a clear everyday benefit and strong impulse-buy appeal.",
+    "benefit": "Faster setup, cleaner routine, easier habit.",
+    "whyWeLike": "Faster setup, cleaner routine, easier habit.",
+    "bestFor": [
+      "Wellness"
+    ],
+    "signals": {
+      "demand": "Approved in CueCart operator workflow",
+      "visual": "Selected for clear short-form product explanation",
+      "price": "$24.50",
+      "affiliateFit": "Merchant pending affiliate routing configured",
+      "profitability": "Unknown"
+    },
+    "tags": [
+      "amazonfinds",
+      "tiktokmademebuyit",
+      "productivityhack",
+      "homeupgrade",
+      "dailyessentials"
+    ],
+    "updated": "2026-04-18"
+  }
+];
