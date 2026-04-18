@@ -63,6 +63,19 @@ function getProductDetailUrl(product) {
   return `product.html?product=${encodeURIComponent(product.slug)}`;
 }
 
+function isPlaceholderDestination(rawUrl) {
+  if (!rawUrl) {
+    return true;
+  }
+
+  try {
+    const url = new URL(rawUrl);
+    return url.hostname === "example.com" || url.hostname === "www.example.com";
+  } catch (_error) {
+    return true;
+  }
+}
+
 function laneLabel(product) {
   const lanes = {
     "smart-buys-under-50": "Smart Buy Under $50",
@@ -96,8 +109,8 @@ function withTrackingParams(rawUrl, product) {
 
 function affiliateAction(product) {
   const destination = product.affiliateUrl || product.product_url;
-  if (!destination) {
-    return '<span class="button button-disabled" aria-disabled="true">Destination pending</span>';
+  if (!destination || isPlaceholderDestination(destination)) {
+    return '<span class="button button-disabled" aria-disabled="true">Source pending</span>';
   }
 
   const href = product.appendUtm === false ? destination : withTrackingParams(destination, product);
@@ -135,6 +148,10 @@ function productImage(product) {
   return product.image || "assets/product-placeholder.svg";
 }
 
+function hasRealProductImage(product) {
+  return Boolean(product.image && product.image !== "assets/product-placeholder.svg");
+}
+
 function productImageAlt(product) {
   return product.imageAlt || `${productTitle(product)} product image.`;
 }
@@ -151,14 +168,20 @@ function productCard(product) {
 
   return `
     <article class="product-card">
-      <a class="product-image-link" href="${escapeHtml(getProductDetailUrl(product))}" aria-label="View details for ${escapeHtml(title)}">
-        <img
-          class="product-image"
-          src="${escapeHtml(productImage(product))}"
-          alt="${escapeHtml(productImageAlt(product))}"
-          loading="lazy"
-          onerror="this.onerror=null; this.src='assets/product-placeholder.svg';"
-        />
+      <a class="product-image-link product-visual ${hasRealProductImage(product) ? "" : "image-missing"}" href="${escapeHtml(getProductDetailUrl(product))}" aria-label="View details for ${escapeHtml(title)}">
+        ${hasRealProductImage(product) ? `
+          <img
+            class="product-image"
+            src="${escapeHtml(productImage(product))}"
+            alt="${escapeHtml(productImageAlt(product))}"
+            loading="lazy"
+            onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+          />
+        ` : ""}
+        <span class="product-visual-fallback">
+          <span>${escapeHtml(laneLabel(product))}</span>
+          <strong>${escapeHtml(title)}</strong>
+        </span>
       </a>
       <div class="product-card-body">
         <div class="product-meta-row">
@@ -362,12 +385,20 @@ function setupProductDetailPage() {
   root.innerHTML = `
     <article class="product-detail-card">
       <div class="product-detail-media">
-        <img
-          class="product-image"
-          src="${escapeHtml(productImage(product))}"
-          alt="${escapeHtml(productImageAlt(product))}"
-          onerror="this.onerror=null; this.src='assets/product-placeholder.svg';"
-        />
+        <div class="product-visual detail-visual ${hasRealProductImage(product) ? "" : "image-missing"}">
+          ${hasRealProductImage(product) ? `
+            <img
+              class="product-image"
+              src="${escapeHtml(productImage(product))}"
+              alt="${escapeHtml(productImageAlt(product))}"
+              onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+            />
+          ` : ""}
+          <span class="product-visual-fallback">
+            <span>${escapeHtml(laneLabel(product))}</span>
+            <strong>${escapeHtml(title)}</strong>
+          </span>
+        </div>
       </div>
       <div class="product-detail-content">
         <p class="eyebrow">${escapeHtml(laneLabel(product))}</p>

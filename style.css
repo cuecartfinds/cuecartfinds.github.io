@@ -561,6 +561,47 @@ h3 {
   text-decoration: none;
 }
 
+.product-visual {
+  position: relative;
+  min-height: 230px;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(24, 174, 180, 0.26), transparent 11rem),
+    radial-gradient(circle at 86% 84%, rgba(184, 230, 204, 0.48), transparent 12rem),
+    linear-gradient(135deg, #f7fbfc, #dff3f4);
+}
+
+.product-visual-fallback {
+  position: absolute;
+  inset: 18px;
+  display: none;
+  align-content: end;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid rgba(8, 33, 63, 0.1);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--navy);
+}
+
+.product-visual-fallback span {
+  color: var(--teal-dark);
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.product-visual-fallback strong {
+  max-width: 14rem;
+  font-size: clamp(1.35rem, 5vw, 2.3rem);
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.product-visual.image-missing .product-visual-fallback {
+  display: grid;
+}
+
 .product-image {
   aspect-ratio: 4 / 3;
   width: 100%;
@@ -702,6 +743,10 @@ h3 {
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--surface-soft);
+}
+
+.detail-visual {
+  min-height: 360px;
 }
 
 .product-detail-content h1 {
